@@ -57,7 +57,7 @@ router.delete("/:id", fetchuser, async (req, res) => {
     // extract public_id from URL
     const urlParts = image.imageUrl.split("/");
     const fileName = urlParts[urlParts.length - 1];
-    const publicId = "gallery-app" + fileName.split(".")[0];
+    const publicId = "gallery-app/" + fileName.split(".")[0];
 
     //delete from cloudinary
     await cloudinary.uploader.destroy(publicId);
