@@ -129,7 +129,7 @@ router.post("/forgot-password", async (req, res) => {
     });
   } catch (error) {
     console.error(error.message);
-    res.status(500).send("server error");
+    res.status(500).send({error : "server error"});
   }
 });
 
@@ -199,7 +199,7 @@ router.post("/reset-password", async (req, res) => {
     });
   } catch (error) {
     console.error(error.message);
-    res.status(500).send("server error");
+    res.status(500).send({error :"server error"});
   }
 });
 
