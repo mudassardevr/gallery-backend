@@ -14,8 +14,10 @@ app.use(cors({
     "https://gallery-frontend-amber.vercel.app"
   ],
   methods: ["GET","POST","PUT","DELETE"],
+  allowedHeaders: ["Content-Type","Authorization"],
   credentials: true
 }));
+
 
 app.use(express.json());
 
@@ -30,6 +32,8 @@ app.use("/api/images", require("./routes/images"));
 //static folder for images
 app.use("/uploads", express.static("uploads"));
 
-app.listen(5000 , ()=> console.log("server is running on 5000"));
+const PORT = process.env.PORT || 5000;///
+
+app.listen(PORT , ()=> console.log(`server is running on ${PORT}`));
 
 
