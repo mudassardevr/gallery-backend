@@ -140,7 +140,7 @@ router.post("/forgot-password", async (req, res) => {
     // SEND EMAIL USING RESEND
     await resend.emails.send({
       from: "onboarding@resend.dev",
-      to: email,
+      to: "asuspulsar3@gmail.com",
       subject: "Password Reset OTP",
       text: `Your OTP is ${otp}`,
     });
