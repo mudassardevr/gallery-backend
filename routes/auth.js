@@ -97,6 +97,10 @@ router.post("/login", async (req, res) => {
 //ROUTE 3 : FORGOT PASSWORD GENERATE OTP : SEND OTP
 router.post("/forgot-password", async (req, res) => {
   try {
+
+    console.log("EMAIL:", process.env.EMAIL);
+    console.log("EMAIL_PASS:", process.env.EMAIL_PASS ? "Loaded" : "Missing");
+
     const { email } = req.body;
 
     if (!email) {
