@@ -2,24 +2,28 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
-const nodemailer = require("nodemailer");
+// const nodemailer = require("nodemailer");
+const {Resend} = require("resend");
 
 const router = express.Router();
 
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+
 //otp:
-const transporter = nodemailer.createTransport({
-  // service: "gmail",
- host: "smtp.gmail.com",
-  port: 587,
-  secure: false, // TLS
-  auth: {
-    user: process.env.EMAIL,
-    pass: process.env.EMAIL_PASS,
-  },
-   tls: {
-    rejectUnauthorized: false
-  }
-});
+// const transporter = nodemailer.createTransport({
+//   // service: "gmail",
+//  host: "smtp.gmail.com",
+//   port: 587,
+//   secure: false, // TLS
+//   auth: {
+//     user: process.env.EMAIL,
+//     pass: process.env.EMAIL_PASS,
+//   },
+//    tls: {
+//     rejectUnauthorized: false
+//   }
+// });
 
 //ROUTER 1 : REGISTER POST : NO LOGIN REQUIRE
 router.post("/register", async (req, res) => {
@@ -101,8 +105,8 @@ router.post("/login", async (req, res) => {
 router.post("/forgot-password", async (req, res) => {
   try {
 
-    console.log("EMAIL:", process.env.EMAIL);
-    console.log("EMAIL_PASS:", process.env.EMAIL_PASS ? "Loaded" : "Missing");
+    // console.log("EMAIL:", process.env.EMAIL);
+    // console.log("EMAIL_PASS:", process.env.EMAIL_PASS ? "Loaded" : "Missing");
 
     const { email } = req.body;
 
@@ -125,13 +129,22 @@ router.post("/forgot-password", async (req, res) => {
 
     await user.save();
 
-    // send email
-    await transporter.sendMail({
-      from: process.env.EMAIL,
+    // // send email
+    // await transporter.sendMail({
+    //   from: process.env.EMAIL,
+    //   to: email,
+    //   subject: "Password Reset OTP",
+    //   text: `Your OTP is ${otp}`,
+    // });
+
+    // SEND EMAIL USING RESEND
+    await resend.emails.send({
+      from: "onboarding@resend.dev",
       to: email,
       subject: "Password Reset OTP",
       text: `Your OTP is ${otp}`,
     });
+
 
     res.json({
       success: true,
