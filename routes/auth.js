@@ -8,14 +8,17 @@ const router = express.Router();
 
 //otp:
 const transporter = nodemailer.createTransport({
-  service: "gmail",
-  // host: "smtp.gmail.com",
-  // port: 465,
-  // secure: true,
+  // service: "gmail",
+ host: "smtp.gmail.com",
+  port: 587,
+  secure: false, // TLS
   auth: {
     user: process.env.EMAIL,
     pass: process.env.EMAIL_PASS,
   },
+   tls: {
+    rejectUnauthorized: false
+  }
 });
 
 //ROUTER 1 : REGISTER POST : NO LOGIN REQUIRE
