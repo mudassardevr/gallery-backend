@@ -3,10 +3,9 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 // const nodemailer = require("nodemailer");
-const {Resend} = require("resend");
+const { Resend } = require("resend");
 
 const router = express.Router();
-
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -104,7 +103,6 @@ router.post("/login", async (req, res) => {
 //ROUTE 3 : FORGOT PASSWORD GENERATE OTP : SEND OTP
 router.post("/forgot-password", async (req, res) => {
   try {
-
     // console.log("EMAIL:", process.env.EMAIL);
     // console.log("EMAIL_PASS:", process.env.EMAIL_PASS ? "Loaded" : "Missing");
 
@@ -142,17 +140,21 @@ router.post("/forgot-password", async (req, res) => {
       from: "onboarding@resend.dev",
       to: "asuspulsar3@gmail.com",
       subject: "Password Reset OTP",
-      text: `Your OTP is ${otp}`,
+      // text: `Your OTP is ${otp}`,
+      html: `
+            <h2>Password Reset OTP</h2>
+            <p>Your OTP is:</p>
+            <h1>${otp}</h1>
+            <p>This OTP expires in 10 minutes.</p>`,
     });
-
 
     res.json({
       success: true,
       message: "OTP sends to email",
     });
   } catch (error) {
-    console.error("Forgot password error : " , error);
-    res.status(500).send({error : error.message});
+    console.error("Forgot password error : ", error);
+    res.status(500).send({ error: error.message });
   }
 });
 
@@ -222,7 +224,7 @@ router.post("/reset-password", async (req, res) => {
     });
   } catch (error) {
     console.error(error.message);
-    res.status(500).send({error :"server error"});
+    res.status(500).send({ error: "server error" });
   }
 });
 
