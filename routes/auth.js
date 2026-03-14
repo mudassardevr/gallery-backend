@@ -55,7 +55,23 @@ router.post("/register", async (req, res) => {
       password: hashPassword,
     });
 
-    res.json({ success: true, message: "Registration Successfull" });
+    // JWT payload
+    const payload = {
+      user: {
+        id: user.id,
+      },
+    };
+
+    // generate token
+    const token = jwt.sign(payload, process.env.JWT_SECRET);
+
+    // send token
+    res.json({
+      success: true,
+      token,
+    });
+
+    // res.json({ success: true, message: "Registration Successfull" });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("server Error");
