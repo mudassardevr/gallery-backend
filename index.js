@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const connectToMongo = require('./config/db');
+const passport = require("./config/passport")
 
 const app = express();
 
@@ -20,9 +21,10 @@ app.use(cors({
 
 
 app.use(express.json());
+app.use(passport.initialize());
 
 app.get("/", (req, res) => {
-  res.send("Gallery Backend API Running 🚀");
+  res.send("Gallery Backend API Running");
 });
 
 //HEALTH ROUTE 

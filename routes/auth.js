@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 // const nodemailer = require("nodemailer");
 const { Resend } = require("resend");
+const passport = require("../config/passport");
 
 const router = express.Router();
 
@@ -243,5 +244,20 @@ router.post("/reset-password", async (req, res) => {
     res.status(500).send({ error: "server error" });
   }
 });
+
+//ROUTE 6 : Continue with Google
+// Step 1: redirect user to Google
+router.get(
+  "google",
+  passport.authenticate("google", { scope: ["profile", "email"] }),
+);
+
+// Step 2: Google sends user back here
+router.get("/google/callback" , passport.authenticate("google" , { session : false }),
+(req , res) => {
+  res.redirect("http://localhost:5173/dashboard");
+
+}
+)
 
 module.exports = router;
