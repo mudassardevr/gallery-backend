@@ -25,6 +25,12 @@ app.get("/", (req, res) => {
   res.send("Gallery Backend API Running 🚀");
 });
 
+//HEALTH ROUTE 
+app.get("/health", (req, res) => {
+  res.send("Server running");
+});
+
+
 //Routes
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/images", require("./routes/images"));
