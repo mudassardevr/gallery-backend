@@ -7,7 +7,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "/api/auth/google/callback",
+      callbackURL: "https://gallery-backend-sgma.onrender.com/api/auth/google/callback",
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
@@ -24,7 +24,7 @@ passport.use(
         }
         done(null, user);
       } catch (error) {
-        done(err, null);
+        done(error, null);
       }
     },
   ),
