@@ -144,14 +144,6 @@ router.post("/forgot-password", async (req, res) => {
 
     await user.save();
 
-    // // send email
-    // await transporter.sendMail({
-    //   from: process.env.EMAIL,
-    //   to: email,
-    //   subject: "Password Reset OTP",
-    //   text: `Your OTP is ${otp}`,
-    // });
-
     // SEND EMAIL USING RESEND
     await resend.emails.send({
       from: "onboarding@resend.dev",
