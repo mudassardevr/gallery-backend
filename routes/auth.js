@@ -245,19 +245,19 @@ router.post("/reset-password", async (req, res) => {
   }
 });
 
-//ROUTE 6 : Continue with Google
-// Step 1: redirect user to Google
-router.get(
-  "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] }),
-);
+// //ROUTE 6 : Continue with Google
+// // Step 1: redirect user to Google
+// router.get(
+//   "/google",
+//   passport.authenticate("google", { scope: ["profile", "email"] }),
+// );
 
-// Step 2: Google sends user back here
-router.get("/google/callback" , passport.authenticate("google" , { session : false }),
-(req , res) => {
-   res.redirect("https://gallery-frontend-amber.vercel.app/");
+// // Step 2: Google sends user back here
+// router.get("/google/callback" , passport.authenticate("google" , { session : false }),
+// (req , res) => {
+//    res.redirect("https://gallery-frontend-amber.vercel.app/");
 
-}
-)
+// }
+// )
 
 module.exports = router;
