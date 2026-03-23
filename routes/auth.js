@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 // const nodemailer = require("nodemailer");
 const { Resend } = require("resend");
-const passport = require("../config/passport");
+
 
 const router = express.Router();
 
