@@ -246,11 +246,13 @@ router.put(
     try {
       const { name } = req.body;
 
+      console.log("FILE:", req.file); // ✅ DEBUG HERE
+
       let updateData = { name };
 
-      //  Image already uploaded by multer-cloudinary
       if (req.file) {
-        updateData.profileImage = req.file.path; //  IMPORTANT
+        updateData.profileImage =
+          req.file.path || req.file.secure_url || "";
       }
 
       const updatedUser = await User.findByIdAndUpdate(
@@ -267,5 +269,4 @@ router.put(
     }
   }
 );
-
 module.exports = router;
