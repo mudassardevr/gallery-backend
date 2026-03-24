@@ -10,20 +10,6 @@ const router = express.Router();
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-//otp:
-// const transporter = nodemailer.createTransport({
-//   // service: "gmail",
-//  host: "smtp.gmail.com",
-//   port: 587,
-//   secure: false, // TLS
-//   auth: {
-//     user: process.env.EMAIL,
-//     pass: process.env.EMAIL_PASS,
-//   },
-//    tls: {
-//     rejectUnauthorized: false
-//   }
-// });
 
 //ROUTER 1 : REGISTER POST : NO LOGIN REQUIRE
 router.post("/register", async (req, res) => {
@@ -237,19 +223,68 @@ router.post("/reset-password", async (req, res) => {
   }
 });
 
-// //ROUTE 6 : Continue with Google
-// // Step 1: redirect user to Google
-// router.get(
-//   "/google",
-//   passport.authenticate("google", { scope: ["profile", "email"] }),
-// );
+//ROUTE 6: get user profile
+router.get("/getuser", fetchuser, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    res.json(user);
+  } catch (error) {
+    res.status(500).send("Server Error");
+  }
+});
 
-// // Step 2: Google sends user back here
-// router.get("/google/callback" , passport.authenticate("google" , { session : false }),
-// (req , res) => {
-//    res.redirect("https://gallery-frontend-amber.vercel.app/");
+//ROUTE 7: UPDATE PROFILE (IMAGE + NAME)
+router.put(
+  "/updateprofile",
+  fetchuser,
+  upload.single("profileImage"),
+  async (req, res) => {
+    try {
+      const { name } = req.body;
 
-// }
-// )
+      let profileImageUrl = "";
+
+      // IF IMAGE EXISTS → UPLOAD TO CLOUDINARY
+      if (req.file) {
+        const result = await cloudinary.uploader.upload_stream(
+          { folder: "profile_images" },
+          async (error, result) => {
+            if (error) {
+              return res.status(500).json({ error: "Upload failed" });
+            }
+
+            profileImageUrl = result.secure_url;
+
+            const updatedUser = await User.findByIdAndUpdate(
+              req.user.id,
+              {
+                name,
+                ...(profileImageUrl && { profileImage: profileImageUrl }),
+              },
+              { new: true }
+            ).select("-password");
+
+            res.json(updatedUser);
+          }
+        );
+
+        result.end(req.file.buffer);
+      } else {
+        // ONLY NAME UPDATE
+        const updatedUser = await User.findByIdAndUpdate(
+          req.user.id,
+          { name },
+          { new: true }
+        ).select("-password");
+
+        res.json(updatedUser);
+      }
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send("Server Error");
+    }
+  }
+);
+
 
 module.exports = router;

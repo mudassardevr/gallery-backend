@@ -1,19 +1,22 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
-    name : String,
-    email : {
-        type : String ,
-        unique : true
-    },
-    password : String,
-    // securityAnswer : String // this is for asking security answer for forget code
+  name: String,
+  email: {
+    type: String,
+    unique: true,
+  },
+  password: String,
 
-    // OTP reset feilds
-    resetOTP : Number, 
-    otpExpiry : Date
+  //for profile image
+  profileImage: {
+    type: String,
+    default: "",
+  },
+  
+  // OTP reset feilds
+  resetOTP: Number,
+  otpExpiry: Date,
+});
 
-
-})
-
-module.exports = mongoose.model("User" , UserSchema);
+module.exports = mongoose.model("User", UserSchema);
