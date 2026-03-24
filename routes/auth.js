@@ -246,8 +246,7 @@ router.put(
     try {
       const { name } = req.body;
 
-      console.log("FILE:", req.file); // ✅ DEBUG HERE
-
+     
       let updateData = { name };
 
       if (req.file) {
