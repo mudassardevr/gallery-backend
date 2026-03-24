@@ -5,6 +5,9 @@ const User = require("../models/User");
 // const nodemailer = require("nodemailer");
 const { Resend } = require("resend");
 const fetchuser = require("../middleware/fetchUser");
+const upload = require("../middleware/upload");
+const cloudinary = require("../config/cloudinary");
+
 
 
 const router = express.Router();
