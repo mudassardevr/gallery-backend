@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 // const nodemailer = require("nodemailer");
 const { Resend } = require("resend");
+const fetchuser = require("../middleware/fetchUser");
 
 
 const router = express.Router();
