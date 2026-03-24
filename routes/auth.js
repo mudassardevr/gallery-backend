@@ -248,25 +248,9 @@ router.put(
 
       let updateData = { name };
 
-      // Upload image to Cloudinary
+      //  Image already uploaded by multer-cloudinary
       if (req.file) {
-        const uploadImage = () => {
-          return new Promise((resolve, reject) => {
-            const stream = cloudinary.uploader.upload_stream(
-              { folder: "profile_images" },
-              (error, result) => {
-                if (error) reject(error);
-                else resolve(result);
-              }
-            );
-            stream.end(req.file.buffer);
-          });
-        };
-
-        const result = await uploadImage();
-
-        //  Save URL
-        updateData.profileImage = result.secure_url;
+        updateData.profileImage = req.file.path; //  IMPORTANT
       }
 
       const updatedUser = await User.findByIdAndUpdate(
@@ -283,57 +267,5 @@ router.put(
     }
   }
 );
-// router.put(
-//   "/updateprofile",
-//   fetchuser,
-//   upload.single("profileImage"),
-//   async (req, res) => {
-//     try {
-//       const { name } = req.body;
-
-//       let profileImageUrl = "";
-
-//       // IF IMAGE EXISTS → UPLOAD TO CLOUDINARY
-//       if (req.file) {
-//         const result = await cloudinary.uploader.upload_stream(
-//           { folder: "profile_images" },
-//           async (error, result) => {
-//             if (error) {
-//               return res.status(500).json({ error: "Upload failed" });
-//             }
-
-//             profileImageUrl = result.secure_url;
-
-//             const updatedUser = await User.findByIdAndUpdate(
-//               req.user.id,
-//               {
-//                 name,
-//                 ...(profileImageUrl && { profileImage: profileImageUrl }),
-//               },
-//               { new: true }
-//             ).select("-password");
-
-//             res.json(updatedUser);
-//           }
-//         );
-
-//         result.end(req.file.buffer);
-//       } else {
-//         // ONLY NAME UPDATE
-//         const updatedUser = await User.findByIdAndUpdate(
-//           req.user.id,
-//           { name },
-//           { new: true }
-//         ).select("-password");
-
-//         res.json(updatedUser);
-//       }
-//     } catch (error) {
-//       console.error(error.message);
-//       res.status(500).send("Server Error");
-//     }
-//   }
-// );
-
 
 module.exports = router;
